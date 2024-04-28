@@ -1,8 +1,8 @@
 build:
-	@go build -o bin/gogo cmd/main.go
+	@go build -o bin/gogo.exe cmd/main.go
 
 test:
 	@go test -v ./...
 
 run: build
-	@./bin/gogo
+	@./bin/gogo.exe
