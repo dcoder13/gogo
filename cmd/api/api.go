@@ -1,6 +1,13 @@
 package api
 
-import "database/sql"
+import (
+	"database/sql"
+	"log"
+	"net/http"
+
+	"github.com/dcoder13/gogo/cmd/service/user"
+	"github.com/gorilla/mux"
+)
 
 type APIServer struct {
 	addr string
@@ -15,5 +22,11 @@ func NewAPIServer(addr string, db *sql.DB) *APIServer {
 }
 
 func (s *APIServer) Run() error {
-	return nil
+	router := mux.NewRouter()
+	subrouter := router.PathPrefix("/api/v1").Subrouter()
+	userHandler := user.NewHandler()
+	userHandler.RegisterRoutes(subrouter)
+
+	log.Println("listening on :", s.addr)
+	return http.ListenAndServe(s.addr, router)
 }
